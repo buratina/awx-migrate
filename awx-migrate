@@ -216,7 +216,7 @@ def decrypt_inputs(awx_creds):
         inputs = value['inputs']
         name = value['name']
         for k, v in inputs.items():
-            if isinstance(v, str) and v.startswith('$encrypted$'):
+            if isinstance(v, basestring) and v.startswith('$encrypted$'):
                 encrypted = v
                 encryption_key = get_encryption_key(k, pk if pk else None)
                 try:
@@ -226,6 +226,7 @@ def decrypt_inputs(awx_creds):
                             "input field {0} for "
                             "credential {1}").format(k, name)
                     sys.stderr.write(_err + '\n')
+                    decrypted = ''
                     continue
                 value['inputs'][k] = decrypted
         awx_creds[key] = value
